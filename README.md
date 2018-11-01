@@ -1,1 +1,2 @@
-# basicthesis
+# phdthesis
+PhD Thesis

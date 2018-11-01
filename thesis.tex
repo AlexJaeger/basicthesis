@@ -1,0 +1,211 @@
+\pdfminorversion=4
+\documentclass[a4paper,12pt, oneside, openright]{book}
+\usepackage[utf8]{inputenc}
+\usepackage[hidelinks]{hyperref}
+\usepackage{graphicx}
+\usepackage[noadjust]{cite}
+\usepackage{float}
+\usepackage{blkarray}
+\usepackage[linesnumbered,lined,commentsnumbered]{algorithm2e}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{lipsum}
+\usepackage{eurosym}
+\usepackage{siunitx}
+\usepackage[ddmmyyyy]{datetime}
+% Only needed if svg package is not supported. svg is prefered as it supports gradients and translucency filters. eps is old and will instead rasterise causing discontinuities in images containing filtered objects.
+%\usepackage{epstopdf}
+
+\usepackage{circuitikz}
+\usepackage[capitalise]{cleveref}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[title,toc,titletoc,header]{appendix}
+\usepackage{nicefrac}
+\usepackage{booktabs}
+\usepackage{tikz}
+
+%%%%%%%% Colophon package
+\usepackage[%
+parstyle=upshape, parsize=10pt,
+parlead=11pt, noclrdblpg,
+nofullpage, topspace=5.7in
+]{packages/colophon/colophon}
+
+
+
+%%%%%%%% ORCID ID Logo and Links
+% Make Orcid icon
+\definecolor{lime}{HTML}{A6CE39}
+\newcommand{\orcidicon}{%
+	\begin{tikzpicture}
+	\draw[lime, fill=lime] (0,0) 
+	circle [radius=0.16] 
+	node[white] {{\fontfamily{phv}\selectfont \tiny ID}};
+	\draw[white, fill=white] (-0.0745,0.105) 
+	circle [radius=0.005];
+	\end{tikzpicture}
+	\hspace{-2mm}
+}
+% Define link and button for each author
+\foreach \x in {A, ..., Z}{%
+	\expandafter\xdef\csname orcid\x\endcsname{\noexpand\href{https://orcid.org/\csname orcidauthor\x\endcsname}{\noexpand\orcidicon}}
+}
+\newcommand{\orcidauthorA}{0000-0003-4771-8469}
+
+
+
+%%%%%%%% Glossaries generation.
+\usepackage[toc,nonumberlist,automake]{glossaries}
+\newglossary[slg]{symbolslist}{syi}{syg}{List of symbols}
+\glsaddkey{unit}{\glsentrytext{\glslabel}}{\glsentryunit}{\GLsentryunit}{\glsunit}{\Glsunit}{\GLSunit}
+\setlength{\glslistdottedwidth}{.3\linewidth}
+\makeglossaries
+
+
+\usepackage[export]{adjustbox}
+\usepackage{setspace}
+\usepackage{listings}
+\usepackage{url}
+\usepackage{bm}
+\usepackage{scrextend}
+\usepackage{threeparttable}
+\usepackage[bottom,symbol]{footmisc}
+\usepackage{import}
+\usepackage[inkscapelatex=false]{svg}
+
+\usepackage{mathptmx}
+%\usepackage{newtxtext,newtxmath}
+
+\usepackage{dirtytalk}
+\usepackage{pdflscape}
+\usepackage{pdfpages}
+\usepackage{afterpage}
+\usepackage{setspace}
+\usepackage[activate={true,nocompatibility},final,tracking=true,kerning=true,spacing=true,factor=1100,stretch=10,shrink=10]{microtype}
+\usepackage[nottoc,numbib]{tocbibind}
+
+
+\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true}
+%\lstset{framextopmargin=50pt,frame=bottomline}
+\newenvironment{absolutelynopagebreak}
+{\par\nobreak\vfil\penalty0\vfilneg
+	\vtop\bgroup}
+{\par\xdef\tpd{\the\prevdepth}\egroup
+	\prevdepth=\tpd}
+
+\newcommand{\overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
+
+\newcommand\abstractname{Abstract}  %%% here
+\makeatletter
+\if@titlepage
+\newenvironment{abstract}{%
+	\titlepage
+	\null\vfil
+	\@beginparpenalty\@lowpenalty
+	\begin{center}%
+		\bfseries \abstractname
+		\@endparpenalty\@M
+\end{center}}%
+{\par\vfil\null\endtitlepage}
+\else
+\newenvironment{abstract}{%
+	\if@twocolumn
+	\section*{\abstractname}%
+	\else
+	\small
+	\begin{center}%
+		{\bfseries \abstractname\vspace{-.5em}\vspace{\z@}}%
+	\end{center}%
+	\quotation
+	\fi}
+{\if@twocolumn\else\endquotation\fi}
+\fi
+\makeatother
+
+
+% Symbol glossary style
+\newglossarystyle{symbunitlong}{%
+	\setglossarystyle{long3col}% base this style on the list style
+	\renewenvironment{theglossary}{% Change the table type --> 3 columns
+		\begin{longtable}{lp{\glsdescwidth}>{\centering\arraybackslash}p{2cm}}}%
+		{\end{longtable}}%
+	%
+	\renewcommand*{\glossaryheader}{%  Change the table header
+		\bfseries Sign & \bfseries Description & \bfseries Unit \\
+		\hline\vspace{0.1cm}
+		\endhead}
+	\renewcommand*{\glossentry}[2]{%  Change the displayed items
+		\glstarget{##1}{\glossentryname{##1}} %
+		& \glossentrydesc{##1}% Description
+		& \glsunit{##1}  \tabularnewline
+	}
+}
+
+
+
+
+
+
+\subimport{abbreviations/}{abbreviations}
+\subimport{symbols/}{symbols}
+
+\begin{document}
+	\author{Full Name}
+	\title{Thesis title}
+	\date{Date\textsuperscript{th} Month Year}
+	
+	
+	\frontmatter
+	% Include titlepage as per UCC guidelines
+	%\includepdf[pages=1]{titlepage/titlepage}
+	\maketitle
+	
+	\input{colophon/colophon}
+	% Declaration
+	\subimport{declaration/}{declaration}
+	% Abstract
+	\subimport{abstract/}{abstract}
+	% Acknowledgements
+	\spacing{1.15}
+	\subimport{acknowledgements/}{acknowledgements}
+	% List of publications
+	\spacing{1.0}
+	\subimport{publications/}{publications}
+
+	\listoffigures
+	\listoftables
+	\tableofcontents
+	
+	
+	\glsaddall
+	\printglossary[type=\acronymtype, title={List of Abbreviations}, style=listdotted]
+	\printglossary[type=symbolslist, title={List of Symbols},style=symbunitlong]
+	
+
+
+	\mainmatter
+	\spacing{1.3}
+	% Introduction chapter
+	\subimport{ch_introduction/}{introduction}
+		
+	% Background chapter
+	\subimport{ch_background/}{background}
+
+	
+
+	% Include the Appendix chapters
+	\appendix
+	%\subimport{...}
+
+	
+	\backmatter
+	% bibliography, glossary and index would go here.
+	\spacing{1.0}
+	\bibliographystyle{./bibliography/IEEEtranTIE}
+	\bibliography{IEEEabrv,library}
+
+
+\end{document}
+
+
